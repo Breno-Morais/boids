@@ -1,14 +1,13 @@
 package EventManager;
 
 public abstract class Event implements Comparable<Event> {
-    private long date;
-
+    protected long date;
     public Event(long date) {
         this.date = date;
     }
 
     public long getDate() {
-        return 0;
+        return date;
     }
 
     abstract public void execute();

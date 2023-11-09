@@ -1,3 +1,5 @@
+package Balls;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -37,10 +39,8 @@ public class Balls {
         }
     }
 
-    public void translate(int dx, int dy) {
-        for (Point ball : balls) {
-            ball.translate(dx,dy);
-        }
+    public void translate(int id, int dx, int dy) {
+        balls.get(id).translate(dx,dy);
     }
 
     public void reInit() {

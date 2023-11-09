@@ -1,4 +1,9 @@
+package Balls;
+
 import EventManager.Event;
+import EventManager.EventManager;
+
+import java.awt.*;
 
 public class BallEvent extends Event {
     public enum EventType { 
@@ -8,31 +13,44 @@ public class BallEvent extends Event {
     private EventType type;
 
     private int step;
-    private int lim;
     private Point pos;
     private Balls balls;
+    private EventManager eventManager;
+    private int ballId;
 
     // Creation
-    public BallEvent(long date, EventType type, Point pos, Balls balls) {
+    public BallEvent(long date, EventManager eventManager, Point pos, Balls balls) {
         super(date);
-        this.type = type;
+        this.type = EventType.CREATION;
+        this.eventManager = eventManager;
         this.pos = pos;
         this.balls = balls;
     }
 
     // Movement
-    public BallEvent(long date, EventType type) {
+    public BallEvent(long date, EventManager eventManager, Point t, int duration, int ballId, Balls balls) {
         super(date);
+        this.type = EventType.TRANSLATION;
+        this.eventManager = eventManager;
+        this.pos = t;
+        this.step = duration;
+        this.ballId = ballId;
+        this.balls = balls;
     }
 
     public void execute() {
         switch (type) {
-            case EventType.CREATION:
+            case CREATION:
                 balls.addBall(pos);
-                
+
+                eventManager.addEvent(new BallEvent(date + 5, eventManager, new Point(0,5), 10, ballId, balls));
                 break;
-        
-            default:
+
+            case TRANSLATION:
+                balls.translate(ballId, pos.x, pos.y);
+
+                if(step > 0)
+                    eventManager.addEvent(new BallEvent(date + 2, eventManager, pos, step-1, ballId, balls));
                 break;
         }
     }

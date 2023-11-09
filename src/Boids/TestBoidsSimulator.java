@@ -1,3 +1,5 @@
+package Boids;
+
 import gui.GUISimulator;
 
 import java.awt.*;

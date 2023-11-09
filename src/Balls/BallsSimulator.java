@@ -1,3 +1,5 @@
+package Balls;
+
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ public class BallsSimulator implements Simulable {
         this.gui = gui;
         eventManager = new EventManager();
 
-        eventManager.addEvent(new BallEvent(eventManager.getCurrent(), BallEvent.EventType.CREATION, new Point(5,2), balls));
+        eventManager.addEvent(new BallEvent(0, eventManager, new Point(200,200), balls));
     }
 
     @Override
