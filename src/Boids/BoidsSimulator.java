@@ -1,5 +1,3 @@
-package Boids;
-
 import gui.GUISimulator;
 import gui.Rectangle;
 import gui.Simulable;
