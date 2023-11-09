@@ -4,8 +4,6 @@ import gui.GUISimulator;
 import gui.Rectangle;
 import gui.Simulable;
 
-import java.awt.*;
-
 public class BoidsSimulator implements Simulable {
     public GUISimulator gui;
     public Boids boids;
@@ -17,7 +15,6 @@ public class BoidsSimulator implements Simulable {
 
     @Override
     public void next() {
-        //System.out.println(boids.toString());
         boids.step();
         draw();
     }
@@ -31,6 +28,6 @@ public class BoidsSimulator implements Simulable {
         gui.reset();    // clear the window
 
         for(Boid boid : boids.getBoids())
-            gui.addGraphicalElement(new Rectangle((int) boid.pos.x, (int) boid.pos.y, Color.WHITE, Color.WHITE, 5));
+            gui.addGraphicalElement(new Rectangle((int) boid.pos.x, (int) boid.pos.y, boid.color, boid.color, 5));
     }
 }

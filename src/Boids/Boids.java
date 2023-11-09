@@ -1,18 +1,22 @@
 package Boids;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
+// TODO: Optimize it
 public class Boids {
     private List<Boid> boids;
-    private final int neighborDistance = 15;
+
+    // Settings Constants
+    private final int neighborDistance = 50;
     private final double smoothingRate = -2;
     private final double smoothingAmplitude = 50;
     private final double speedConstant = 2;
-    private final double cohesionConstant = 0.1;
-    private final double mass = 1.0;
+    private final double cohesionConstant = 0.002;
+    private final double viewAngle = Math.toRadians(120);
 
+    // World values
     private double width;
     private double height;
 
@@ -26,26 +30,39 @@ public class Boids {
         boids.add(bd);
     }
 
+    // Highlight the first boid and shows in grey all the neighbors visible
+    public void followFirst() {
+        boids.get(0).color = Color.RED;
+        for(Boid boid : neighborsOfBoid(boids.get(0)))
+            boid.color = Color.GRAY;
+    }
+
     public void step() {
         for(Boid boid : boids) {
             calcForce(boid);
         }
-
-        //System.out.println(toString());
+        
+        //followFirst();
     }
 
     private List<Boid> neighborsOfBoid(Boid centerBoid) {
         List<Boid> neighbor = new ArrayList<Boid>();
 
         for(Boid otherBoid : boids) {
-            if((centerBoid != otherBoid) && (centerBoid.pos.distance(otherBoid.pos) <= neighborDistance))
+            boolean notSame = centerBoid != otherBoid;
+
+            Vector2D vecFromCenterToOther = Vector2D.subtract(otherBoid.pos, centerBoid.pos);
+            double dot = centerBoid.dir.dot(vecFromCenterToOther);
+            double angle = Math.acos(dot/vecFromCenterToOther.getLength());
+            boolean inView = angle <= viewAngle; 
+
+            boolean inDistance = centerBoid.pos.distance(otherBoid.pos) <= neighborDistance;
+            if(notSame && inDistance && inView)
                 neighbor.add(otherBoid);
         }
 
         return neighbor;
     }
-
-    // TODO: Add more buoyancy
 
     private void calcForce(Boid boid) {
         List<Boid> neighbors = neighborsOfBoid(boid);
@@ -53,7 +70,6 @@ public class Boids {
         Vector2D mediumPoint = new Vector2D(0,0);
         int numberOfNeighbors = neighbors.size();
 
-//        System.out.println("______________________________");
         for(Boid neighbor : neighbors) {
             // Separation
             force.add(separationForce(boid, neighbor));
