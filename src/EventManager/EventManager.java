@@ -4,10 +4,10 @@ import java.util.PriorityQueue;
 
 public class EventManager {
     private long currentDate;
-    private PriorityQueue<Event> events;
+    public PriorityQueue<Event> events;
 
     public EventManager() {
-        events = new PriorityQueue<Event>();
+        events = new PriorityQueue<>();
         currentDate = 0;
     }
 
@@ -20,6 +20,7 @@ public class EventManager {
 
         while(events.peek() != null && events.peek().getDate() <= currentDate) {
             Event current = events.poll();
+            assert current != null;
             current.execute();
         }
     }

@@ -1,41 +1,72 @@
 package Boids;
 
+import Boids.Predator.PredatorBoids;
+import Boids.Prey.PreyBoids;
 import gui.GUISimulator;
 
 import java.awt.*;
 
 public class TestBoidsSimulator {
     public static void main(String[] args) {
-        int widht = 1840;
-        int height = 920; 
+        int width = 1275;
+        int height = 955;
 
-        Boids boids = new Boids(widht,height);
+        GUISimulator gui = new GUISimulator(width,height, Color.WHITE);
+        BoidsSimulator boidsSimulator = new BoidsSimulator(gui, width, height);
 
-        for(int i = 0; i < 500; i++) {
-            double posX = Math.random() * widht;  
+        Boids predatorBoids = new PredatorBoids(boidsSimulator);
+        Boids preyBoids = new PreyBoids(boidsSimulator);
+
+        for(int i = 0; i < 10; i++) {
+            double posX = Math.random() * width;
             double posY = Math.random() * height;
-            double dirX = Math.random() * 2 - 1;
-            double dirY = Math.random() * 2 - 1;
+            double dirX = Math.random() - 0.5;
+            double dirY = Math.random() - 0.5;
 
-            // float red = (float) Math.random();
-            // float green = (float) Math.random();
-            // float blue = (float) Math.random();
+            /*
+            float red = (float) Math.random();
+            float green = (float) Math.random();
+            float blue = (float) Math.random();
             Color randomColor = Color.WHITE;
 
-            if((posX > widht/2) && (posY < height/2))
+            if((posX > width/2.0) && (posY < height/2.0))
                 randomColor = Color.RED;
-            else if((posX < widht/2) && (posY < height/2))
+            else if((posX < width/2.0) && (posY < height/2.0))
                 randomColor = Color.GREEN;
-            else if((posX < widht/2) && (posY > height/2))
+            else if((posX < width/2.0) && (posY > height/2.0))
                 randomColor = Color.BLUE;
-            else if((posX > widht/2) && (posY > height/2))
+            else if((posX > width/2.0) && (posY > height/2.0))
                 randomColor = Color.YELLOW;
+            */
 
-
-            boids.addBoid(new Boid(posX, posY, dirX, dirY, randomColor));
+            predatorBoids.addBoid(posX, posY, dirX, dirY);
         }
 
-        GUISimulator gui = new GUISimulator(widht,height, Color.BLACK);
-        gui.setSimulable(new BoidsSimulator(gui, boids));
+        for(int i = 0; i < 990; i++) {
+            double posX = Math.random() * width;
+            double posY = Math.random() * height;
+            double dirX = Math.random() - 0.5;
+            double dirY = Math.random() - 0.5;
+
+            /*
+            float red = (float) Math.random();
+            float green = (float) Math.random();
+            float blue = (float) Math.random();
+            Color randomColor = Color.WHITE;
+
+            if((posX > width/2.0) && (posY < height/2.0))
+                randomColor = Color.RED;
+            else if((posX < width/2.0) && (posY < height/2.0))
+                randomColor = Color.GREEN;
+            else if((posX < width/2.0) && (posY > height/2.0))
+                randomColor = Color.BLUE;
+            else if((posX > width/2.0) && (posY > height/2.0))
+                randomColor = Color.YELLOW;
+            */
+
+            preyBoids.addBoid(posX, posY, dirX, dirY);
+        }
+
+        gui.setSimulable(boidsSimulator);
     }
 }
