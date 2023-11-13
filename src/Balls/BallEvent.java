@@ -1,5 +1,6 @@
 package Balls;
 
+import Boids.Vector2D;
 import EventManager.Event;
 import EventManager.EventManager;
 
@@ -13,44 +14,43 @@ public class BallEvent extends Event {
     private EventType type;
 
     private int step;
-    private Point pos;
+    private Ball ball;
     private Balls balls;
     private EventManager eventManager;
     private int ballId;
 
     // Creation
-    public BallEvent(long date, EventManager eventManager, Point pos, Balls balls) {
+    public BallEvent(long date, EventManager eventManager, Ball ball, Balls balls) {
         super(date);
         this.type = EventType.CREATION;
         this.eventManager = eventManager;
-        this.pos = pos;
+        this.ball = ball;
         this.balls = balls;
     }
 
     // Movement
-    public BallEvent(long date, EventManager eventManager, Point t, int duration, int ballId, Balls balls) {
+    public BallEvent(long date, EventManager eventManager, Ball ball, int duration, Balls balls) {
         super(date);
         this.type = EventType.TRANSLATION;
         this.eventManager = eventManager;
-        this.pos = t;
+        this.ball = ball;
         this.step = duration;
-        this.ballId = ballId;
         this.balls = balls;
     }
 
     public void execute() {
         switch (type) {
             case CREATION:
-                balls.addBall(pos);
+                balls.addBall(ball);
 
-                eventManager.addEvent(new BallEvent(date + 5, eventManager, new Point(0,5), 10, ballId, balls));
+                eventManager.addEvent(new BallEvent(date, eventManager, ball, 100, balls));
                 break;
 
             case TRANSLATION:
-                balls.translate(ballId, pos.x, pos.y);
+                balls.translate(ball);
 
-                if(step > 0)
-                    eventManager.addEvent(new BallEvent(date + 2, eventManager, pos, step-1, ballId, balls));
+                //if(step > 0)
+                    eventManager.addEvent(new BallEvent(date + 2, eventManager, ball, step-1, balls));
                 break;
         }
     }

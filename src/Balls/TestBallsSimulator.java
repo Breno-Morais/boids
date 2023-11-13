@@ -10,8 +10,17 @@ import gui.Simulable;
 
 public class TestBallsSimulator {
     public static void main(String[] args) {
-        GUISimulator gui = new GUISimulator(500,500, Color.BLACK);
+        int width = 700;
+        int height = 500;
+        GUISimulator gui = new GUISimulator(width,height, Color.BLACK);
+        BallsSimulator ballsSimulator = new BallsSimulator(gui, width, height);
+        for(int i = 0; i < 10; i++) {
+            double posX = Math.random() * width;
+            double posY = Math.random() * height;
 
-        gui.setSimulable(new BallsSimulator(gui));
+            ballsSimulator.createBall(posX, posY);
+        }
+
+        gui.setSimulable(ballsSimulator);
     }
 }

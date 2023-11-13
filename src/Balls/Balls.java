@@ -4,58 +4,45 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import Boids.Vector2D;
 import gui.GUISimulator;
 import gui.Rectangle;
 import gui.Simulable;
 
 public class Balls {
 
-    public List<Point> balls;
-    private List<Point> initPosBalls;
+    public List<Ball> balls;
+    public int width;
+    public int height;
 
-    public Balls(List<Point> inArr) {
-        balls = new ArrayList<Point>(inArr);
-        initPosBalls = new ArrayList<Point>(inArr);
+    public Balls(List<Ball> inArr) {
+        balls = new ArrayList<Ball>(inArr);
     }
 
-    public Balls() {
-        balls = new ArrayList<Point>();
-        initPosBalls = new ArrayList<Point>();
+    public Balls(int width, int height) {
+        balls = new ArrayList<Ball>();
+        this.width = width;
+        this.height = height;
     }
 
-    public void addBall(Point pt) {
-        initPosBalls.add(pt);
-        balls.add(pt);
+    public void addBall(Ball ball) {
+        balls.add(ball);
     }
 
-    public void addBall(int x, int y) {
-        initPosBalls.add(new Point(x,y));
-        balls.add(new Point(x,y));
-    }
+    public void translate(Ball ball) {
 
-    public void translate(int dx, int dy) {
-        for (Point ball : balls) {
-            ball.translate(dx,dy);
-        }
-    }
+        Vector2D nextPos = ball.pos.getAdded(ball.getSpeed());
+        if((nextPos.x <= 0) || (nextPos.x >= width))
+            ball.speed.set(-ball.speed.x, ball.speed.y);
 
-    public void translate(int id, int dx, int dy) {
-        balls.get(id).translate(dx,dy);
-    }
+        if((nextPos.y <= 0) || (nextPos.y >= height))
+            ball.speed.set(ball.speed.x, -ball.speed.y);
 
-    public void reInit() {
-        balls.clear();
-        for (Point p : initPosBalls) {
-            balls.add(new Point(p));
-        }
+        ball.translate();
     }
 
     public void clear() {
         balls.clear();
-    }
-
-    public int getNbBalls() {
-        return balls.size();
     }
 
     @Override
@@ -63,8 +50,8 @@ public class Balls {
         StringBuilder strBd = new StringBuilder();
 
         strBd.append("Balls positions: \n");
-        for(Point ball : balls)
-            strBd.append(String.format("    (%d,%d)\n", ball.x, ball.y));
+        for(Ball ball : balls)
+            strBd.append(String.format("    (%.2f,%.2f)\n", ball.pos.x, ball.pos.y));
 
         return strBd.toString();
     }

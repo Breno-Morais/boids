@@ -4,6 +4,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import Boids.Vector2D;
 import EventManager.EventManager;
 import gui.GUISimulator;
 import gui.Rectangle;
@@ -14,12 +15,14 @@ public class BallsSimulator implements Simulable {
     private Balls balls;
     private EventManager eventManager;
 
-    public BallsSimulator(GUISimulator gui) {
-        this.balls = new Balls();
+    public BallsSimulator(GUISimulator gui, int width, int height) {
+        this.balls = new Balls(width, height);
         this.gui = gui;
         eventManager = new EventManager();
+    }
 
-        eventManager.addEvent(new BallEvent(0, eventManager, new Point(200,200), balls));
+    public void createBall(double x, double y) {
+        eventManager.addEvent(new BallEvent(eventManager.getCurrent(), eventManager, new Ball(new Vector2D(x,y)), balls));
     }
 
     @Override
@@ -37,7 +40,7 @@ public class BallsSimulator implements Simulable {
     private void draw() {
         gui.reset();    // clear the window
 
-        for(Point ball : balls.balls)
-            gui.addGraphicalElement(new Rectangle(ball.x, ball.y, Color.WHITE, Color.WHITE, 10));
+        for(Ball ball : balls.balls)
+            gui.addGraphicalElement(new Rectangle((int) ball.pos.x, (int) ball.pos.y, Color.WHITE, Color.WHITE, 10));
     }
 }
