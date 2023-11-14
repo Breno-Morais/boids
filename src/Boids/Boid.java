@@ -6,32 +6,28 @@ public class Boid {
     public Vector2D pos;
     public Vector2D dir;
     public Color color;
-    public enum BoidType {
-        BASIC, PREDATOR, PREY
-    }
-    public BoidType type;
 
-    public Boid(double posX, double posY, double dirX, double dirY, BoidType type) {
+    public Boid(Vector2D pos, Vector2D speed) {
+        this.pos = new Vector2D(pos);
+        this.dir = new Vector2D(speed);
+        this.color = Color.WHITE;
+    }
+
+    public Boid(double posX, double posY, double dirX, double dirY) {
         this.pos = new Vector2D(posX, posY);
         this.dir = new Vector2D(dirX, dirY).getNormalized();
-        this.type = type;
-        switch (type) {
-            case BASIC:
-                this.color = Color.BLACK;
-                break;
-
-            case PREDATOR:
-                this.color = Color.RED;
-                break;
-
-            case PREY:
-                this.color = Color.GREEN;
-                break;
-        }
+        this.color = Color.WHITE;
     }
 
-    @Override
-    public String toString() {
-        return "Boid (" + pos.x + ", " + pos.y + ")";
+    public Boid(Vector2D pos, Vector2D speed, Color color) {
+        this.pos = new Vector2D(pos);
+        this.dir = new Vector2D(speed);
+        this.color = color;
+    }
+
+    public Boid(double posX, double posY, double dirX, double dirY, Color color) {
+        this.pos = new Vector2D(posX, posY);
+        this.dir = new Vector2D(dirX, dirY).getNormalized();
+        this.color = color;
     }
 }

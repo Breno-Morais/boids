@@ -29,7 +29,7 @@ public class Cells implements Simulable {
     public void initializeGrid(int nbStates) {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                grid[i][j] = (int) (Math.random() * (nbStates+2));// Initialize randomly 
+                grid[i][j] = (int) (Math.random() * (nbStates+2));// Initialize randomly with 20% alive cells
             }
         }
     }
