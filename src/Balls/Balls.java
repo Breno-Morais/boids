@@ -1,13 +1,9 @@
 package Balls;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import Boids.Vector2D;
-import gui.GUISimulator;
-import gui.Rectangle;
-import gui.Simulable;
 
 public class Balls {
 

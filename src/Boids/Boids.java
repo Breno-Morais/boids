@@ -11,7 +11,7 @@ public class Boids {
     protected double smoothingRate = -0.75;
     protected double smoothingAmplitude = 80;
     protected double speedConstant = 3;
-    protected double cohesionConstant = 0.0001;
+    protected double cohesionConstant = 0.001;
     protected double viewAngle = Math.toRadians(160);
 
     // World values
@@ -106,8 +106,8 @@ public class Boids {
             double dot = centerBoid.dir.dot(vecFromCenterToOther);
             double angle = Math.acos(dot/vecFromCenterToOther.getLength());
             boolean inView = angle <= viewAngle; 
-
-            boolean inDistance = centerBoid.pos.distance(otherBoid.pos) <= neighborDistance;
+            boolean inDistance = inDistance(centerBoid, otherBoid);
+            
             if(notSame && inDistance && inView)
                 neighbor.add(otherBoid);
         }
@@ -115,11 +115,11 @@ public class Boids {
         return neighbor;
     }
 
-    protected Vector2D calcForce(Boid boid) {
-        // Show one
-//        boid.color = Color.BLACK;
-//        followFirst();
+    protected boolean inDistance(Boid centerBoid, Boid otherBoid) {
+        return centerBoid.pos.distance(otherBoid.pos) <= neighborDistance;
+    }
 
+    protected void calcForce(Boid boid) {
         List<Boid> neighbors = neighborsOfBoid(boid);
         Vector2D force = new Vector2D(0,0);
         Vector2D mediumPoint = new Vector2D(0,0);
@@ -137,13 +137,12 @@ public class Boids {
         }
         // Cohesion
         force.add(cohesionForce(boid, mediumPoint));
-        return force;
+        
+        boid.force = force;
     }
 
     public void updatePos(Boid boid) {
-        Vector2D force = calcForce(boid);
-
-        boid.dir.add(force);
+        boid.dir.add(boid.force);
         boid.dir.normalize();
 
         int[] oldCoord = calculateMatrixCell(boid.pos.x, boid.pos.y);

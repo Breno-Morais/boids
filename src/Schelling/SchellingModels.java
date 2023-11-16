@@ -11,9 +11,9 @@ import java.awt.Color;
 public class SchellingModels extends Cells {
     private LinkedList<Point> vacantHomes;
     private final int k = 3; // limit of neighbors of different colors
-    private final int nbColors = 5; // 10 colors implemented
+    private final int nbColors = 4; // 10 colors implemented
 
-    private final double chanceForZero = 0.01;
+    private final double chanceForZero = 0.06;
 
     public SchellingModels(int rows, int cols, GUISimulator guiSim){
         super(rows,cols,guiSim);
@@ -29,16 +29,21 @@ public class SchellingModels extends Cells {
     public void initializeGrid() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
-                grid[i][j] = (Math.random() < chanceForZero) ? 0 : (int) (Math.random() * (nbColors)) + 1;; // Lower chance of having 0
-                //eventManager.addEvent(new CellEvent((long) (Math.random() * ((long) rows * cols)), this, i, j));
-                eventManager.addEvent(new CellEvent(0, this, i, j));
+                grid[i][j] = gridValue(); // Initialize randomly
+                bufferGrid[i][j] = grid[i][j];
+                eventManager.addEvent(new CellEvent(0, this, i, j, 1));
             }
         }
     }
 
     @Override
+    protected int gridValue() {
+        return (Math.random() < chanceForZero) ? 0 : (int) (Math.random() * (nbColors)) + 1;
+    }
+
+    @Override
     public void evolve(int i, int j) {
-        if(shouldMove(i,j)) {
+        if(shouldMove(i,j, grid[i][j])) {
             moveToVacantHome(i,j);
         }
     }
@@ -46,17 +51,34 @@ public class SchellingModels extends Cells {
     private void moveToVacantHome(int i, int j) {
         if(vacantHomes.isEmpty())
             return;
+        
+        if(grid[i][j] == 0)
+            return;
 
-        Point emptyHouse = vacantHomes.pop();
-
+        Point emptyHouse = vacantHomes.poll();
         grid[emptyHouse.x][emptyHouse.y] = grid[i][j];
         grid[i][j] = 0;
 
         vacantHomes.addLast(new Point(i,j));
+        // Point emptyHouse = null;
+        // for(Point vacantHome : vacantHomes) {
+        //     if(!shouldMove(vacantHome.x, vacantHome.y, grid[i][j])) {
+        //         emptyHouse = vacantHome;
+        //         break;
+        //     }
+        // }
+
+        // if(emptyHouse != null){ 
+        //     grid[emptyHouse.x][emptyHouse.y] = grid[i][j];
+        //     grid[i][j] = 0;
+
+        //     vacantHomes.remove(emptyHouse);
+        //     vacantHomes.addLast(new Point(i,j));
+        // }
     }
 
-    private boolean shouldMove(int i, int j) {
-        return (countNeighborsDifColor(i,j, grid[i][j]) > k);
+    private boolean shouldMove(int i, int j, int v) {
+        return (countNeighborsDifColor(i,j, v) > k);
     }
 
     private int countNeighborsDifColor(int x, int y, int color) {
@@ -73,7 +95,7 @@ public class SchellingModels extends Cells {
 
                 boolean notTheSame = !(i == 0 && j == 0);
                 boolean isDifferent = grid[neighborX][neighborY] != color;
-                boolean isNotEmpty = grid[neighborX][neighborY] != 0;
+                boolean isNotEmpty = true; //grid[neighborX][neighborY] != 0;
                 //System.out.println("X: " + x + " Y: " + y + " neig: " + neighborX + ", " + neighborY + " values XY: " + color + " NEIG: " + grid[neighborX][neighborY]);
                 if (notTheSame && isDifferent && isNotEmpty){
                     count++;
@@ -98,13 +120,13 @@ public class SchellingModels extends Cells {
     protected Color getColorForState(int state) {
         return switch (state) {
             case 10 -> Color.LIGHT_GRAY; // Color 10
-            case 9 -> Color.YELLOW; // Color 9
+            case 9 -> Color.CYAN; // Color 9
             case 8 -> Color.PINK; // Color 8
             case 7 -> Color.ORANGE; // Color 7
             case 6 -> Color.MAGENTA; // Color 6
             case 5 -> Color.GRAY; // Color 5
             case 4 -> Color.GREEN; // Color 4
-            case 3 -> Color.CYAN; // Color 3
+            case 3 -> Color.YELLOW; // Color 3
             case 2 -> Color.BLUE; // Color 2
             case 1 -> Color.RED; // Color 1
             case 0 -> Color.WHITE; // Vacant

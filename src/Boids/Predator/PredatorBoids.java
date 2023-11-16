@@ -12,7 +12,7 @@ public class PredatorBoids extends Boids {
     protected double hunger = 10;
     protected final double eatingRadius = 7.5;
     protected int lastEaten;
-    protected double hungerSpeedFactor = 0.0001;
+    protected double hungerSpeedFactor = 0.001;
 
     protected EventManager eventManager;
     protected List<Boids> listBoids;
@@ -24,8 +24,7 @@ public class PredatorBoids extends Boids {
 
         // Boid settings
         this.viewAngle = Math.toRadians(120);
-        this.speedConstant = 1.5;
-        this.neighborDistance = 50;
+        this.neighborDistance = 100;
         this.smoothingRate = -0.05;
         this.smoothingAmplitude = 100;
         this.lastEaten = 0;
@@ -45,11 +44,7 @@ public class PredatorBoids extends Boids {
     }
 
     @Override
-    protected Vector2D calcForce(Boid boid) {
-        // Show one
-//        boid.color = Color.BLACK;
-//        followFirst();
-
+    protected void calcForce(Boid boid) {
         List<Boid> neighbors = neighborsOfBoid(boid);
         Vector2D force = new Vector2D(0,0);
         Boid lockedNow = null;
@@ -57,11 +52,12 @@ public class PredatorBoids extends Boids {
         for(Boid neighbor : neighbors) {
             if(neighbor.type == Boid.BoidType.PREDATOR) {
                 // Separation
-                force.add(separationForce(boid, neighbor));
+                Vector2D separationVector = separationForce(boid, neighbor);
+                force.add(separationVector.getMultiplied(locked == null ? 1 : 0.1));
 
             } else if(neighbor.type == Boid.BoidType.PREY) {
                 if(neighbor.pos.distance(boid.pos) <= eatingRadius) {
-                    lastEaten = -1;
+                    lastEaten = -99;
                     eventManager.addEvent(new EatBoidEvent(0, neighbor, listBoids, eventManager));
                 }
 
@@ -79,22 +75,21 @@ public class PredatorBoids extends Boids {
             // Hunt
             force.add(Vector2D.subtract(lockedNow.pos, boid.pos).getMultiplied(hunger));
 
-        return force;
+        boid.force = force;
     }
 
     @Override
     public void updatePos(Boid boid) {
-        Vector2D force = calcForce(boid);
 
         updateHunger();
 
-        boid.dir.add(force);
+        boid.dir.add(boid.force);
         boid.dir.normalize();
 
         int[] oldCoord = calculateMatrixCell(boid.pos.x, boid.pos.y);
 
         // TODO: Avoid Border but rebound
-        boid.pos.add(boid.dir.getMultiplied(speedConstant + (lastEaten * hungerSpeedFactor)));
+        boid.pos.add(boid.dir.getMultiplied(speedConstant + (lastEaten * hungerSpeedFactor * (locked == null ? 1 : 1.2))));
 
         if(boid.pos.x <= 0)
             boid.pos.x = width;

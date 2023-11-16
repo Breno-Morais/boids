@@ -1,9 +1,6 @@
 package Balls;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
-
 import Boids.Vector2D;
 import EventManager.EventManager;
 import gui.GUISimulator;

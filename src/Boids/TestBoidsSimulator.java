@@ -16,28 +16,13 @@ public class TestBoidsSimulator {
 
         Boids predatorBoids = new PredatorBoids(boidsSimulator);
         Boids preyBoids = new PreyBoids(boidsSimulator);
+        Boids normalBoids = new Boids(boidsSimulator);
 
         for(int i = 0; i < 10; i++) {
             double posX = Math.random() * width;
             double posY = Math.random() * height;
             double dirX = Math.random() - 0.5;
             double dirY = Math.random() - 0.5;
-
-            /*
-            float red = (float) Math.random();
-            float green = (float) Math.random();
-            float blue = (float) Math.random();
-            Color randomColor = Color.WHITE;
-
-            if((posX > width/2.0) && (posY < height/2.0))
-                randomColor = Color.RED;
-            else if((posX < width/2.0) && (posY < height/2.0))
-                randomColor = Color.GREEN;
-            else if((posX < width/2.0) && (posY > height/2.0))
-                randomColor = Color.BLUE;
-            else if((posX > width/2.0) && (posY > height/2.0))
-                randomColor = Color.YELLOW;
-            */
 
             predatorBoids.addBoid(posX, posY, dirX, dirY);
         }
@@ -48,24 +33,17 @@ public class TestBoidsSimulator {
             double dirX = Math.random() - 0.5;
             double dirY = Math.random() - 0.5;
 
-            /*
-            float red = (float) Math.random();
-            float green = (float) Math.random();
-            float blue = (float) Math.random();
-            Color randomColor = Color.WHITE;
-
-            if((posX > width/2.0) && (posY < height/2.0))
-                randomColor = Color.RED;
-            else if((posX < width/2.0) && (posY < height/2.0))
-                randomColor = Color.GREEN;
-            else if((posX < width/2.0) && (posY > height/2.0))
-                randomColor = Color.BLUE;
-            else if((posX > width/2.0) && (posY > height/2.0))
-                randomColor = Color.YELLOW;
-            */
-
             preyBoids.addBoid(posX, posY, dirX, dirY);
         }
+
+        // for(int i = 0; i < 1000; i++) {
+        //     double posX = Math.random() * width;
+        //     double posY = Math.random() * height;
+        //     double dirX = Math.random() - 0.5;
+        //     double dirY = Math.random() - 0.5;
+
+        //     normalBoids.addBoid(posX, posY, dirX, dirY);
+        // }
 
         gui.setSimulable(boidsSimulator);
     }

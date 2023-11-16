@@ -1,10 +1,7 @@
 package Balls;
 
-import Boids.Vector2D;
 import EventManager.Event;
 import EventManager.EventManager;
-
-import java.awt.*;
 
 public class BallEvent extends Event {
     public enum EventType { 
@@ -17,7 +14,6 @@ public class BallEvent extends Event {
     private Ball ball;
     private Balls balls;
     private EventManager eventManager;
-    private int ballId;
 
     // Creation
     public BallEvent(long date, EventManager eventManager, Ball ball, Balls balls) {

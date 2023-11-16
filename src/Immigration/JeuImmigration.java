@@ -19,13 +19,8 @@ public class JeuImmigration extends Cells {
     }
 
     @Override
-    public void initializeGrid() {
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                grid[i][j] = (int) (Math.random() * NUM_STATES);// Initialize randomly
-                eventManager.addEvent(new CellEvent(0, this, i, j));
-            }
-        }
+    protected int gridValue() {
+        return (int) (Math.random() * NUM_STATES);
     }
 
     @Override
@@ -35,7 +30,7 @@ public class JeuImmigration extends Cells {
 
         // Evolution rules specific to the cellular automaton
         if (neighbors >= 3) {
-            grid[i][j] = nextState;
+            bufferGrid[i][j] = nextState;
         }
     }
 

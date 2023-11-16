@@ -2,8 +2,8 @@ package Boids;
 
 import EventManager.EventManager;
 import gui.GUISimulator;
-import gui.Rectangle;
 import gui.Simulable;
+import gui.Oval;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -33,7 +33,7 @@ public class BoidsSimulator implements Simulable {
         this.width = width;
         this.height = height;
 
-        int sizeOfGrid = (int) Math.ceil(neighborDistance / Math.sqrt(2));
+        int sizeOfGrid = (int) Math.ceil((neighborDistance*1.5) / Math.sqrt(2));
         this.nGrid = (int) Math.floor((double) width / sizeOfGrid);
         this.mGrid = (int) Math.floor((double) height / sizeOfGrid);
 
@@ -52,7 +52,8 @@ public class BoidsSimulator implements Simulable {
     }
 
     public void activateBoid(Boid boid, Boids boids) {
-        eventManager.addEvent(new BoidMoveEvent(eventManager.getCurrent(), boid, boids, eventManager));
+        eventManager.addEvent(new BoidForceEvent(eventManager.getCurrent(), boid, boids, eventManager));
+        eventManager.addEvent(new BoidMoveEvent(eventManager.getCurrent()+1, boid, boids, eventManager));
     }
 
     @Override
@@ -72,7 +73,8 @@ public class BoidsSimulator implements Simulable {
         for(Boids boids: listBoids)
             for(Boid boid : boids.getBoids()) {
                 int boidSize = (boid.type == Boid.BoidType.PREDATOR) ? 8 : 5;
-                gui.addGraphicalElement(new Rectangle((int) boid.pos.x, (int) boid.pos.y, boid.color, boid.color, boidSize));
+                //gui.addGraphicalElement(new Rectangle((int) boid.pos.x, (int) boid.pos.y, boid.color, boid.color, boidSize));
+                gui.addGraphicalElement(new Oval((int) boid.pos.x, (int) boid.pos.y, boid.color, boid.color, boidSize));
             }
     }
 }

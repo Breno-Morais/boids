@@ -3,12 +3,12 @@ package Boids;
 import EventManager.Event;
 import EventManager.EventManager;
 
-public class BoidMoveEvent extends Event {
+public class BoidForceEvent extends Event {
     private final EventManager eventManager;
     private final Boids boids;
     public Boid boid;
 
-    public BoidMoveEvent(long date, Boid boid, Boids boids, EventManager eventManager) {
+    public BoidForceEvent(long date, Boid boid, Boids boids, EventManager eventManager) {
         super(date);
         this.eventManager = eventManager;
         this.boids = boids;
@@ -16,8 +16,8 @@ public class BoidMoveEvent extends Event {
     }
 
     public void execute() {
-        boids.updatePos(boid);
+        boids.calcForce(boid);
 
-        eventManager.addEvent(new BoidMoveEvent(date + 2, boid, boids, eventManager));
+        eventManager.addEvent(new BoidForceEvent(date + 2, boid, boids, eventManager));
     }
 }

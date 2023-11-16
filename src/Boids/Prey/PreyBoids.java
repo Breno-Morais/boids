@@ -6,12 +6,14 @@ import java.util.List;
 
 public class PreyBoids extends Boids {
     protected final double fear = 10;
-    protected final double smoothingRatePredator = -0.5;
-    protected final double smoothingAmplitudePredator = 60;
+    protected final double smoothingRatePredator = -0.1;
+    protected final double smoothingAmplitudePredator = 30;
+    protected final double predatorDistance = neighborDistance * 2;
 
     public PreyBoids(BoidsSimulator boidsSimulator) {
         super(boidsSimulator);
-        //this.neighborDistance = 50;
+
+        this.viewAngle = Math.toRadians(200);
     }
 
     @Override
@@ -28,11 +30,7 @@ public class PreyBoids extends Boids {
     }
 
     @Override
-    protected Vector2D calcForce(Boid boid) {
-        // Show one
-//        boid.color = Color.BLACK;
-//        followFirst();
-
+    protected void calcForce(Boid boid) {
         List<Boid> neighbors = neighborsOfBoid(boid);
         Vector2D force = new Vector2D(0,0);
         Vector2D mediumPoint = new Vector2D(0,0);
@@ -56,7 +54,14 @@ public class PreyBoids extends Boids {
         }
         // Cohesion
         force.add(cohesionForce(boid, mediumPoint));
-        return force;
+        
+        boid.force = force;
+    }
+
+
+    @Override
+    protected boolean inDistance(Boid centerBoid, Boid otherBoid) {
+        return centerBoid.pos.distance(otherBoid.pos) <= ((otherBoid.type == Boid.BoidType.PREDATOR) ? predatorDistance : neighborDistance);
     }
 
     private Vector2D fearForce(Vector2D preyPos, Vector2D predatorPos) {

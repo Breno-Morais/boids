@@ -16,13 +16,22 @@ public class EventManager {
     }
 
     public void next() {
-        currentDate++;
-
+        // Calculte the next state
         while(events.peek() != null && events.peek().getDate() <= currentDate) {
             Event current = events.poll();
             assert current != null;
             current.execute();
         }
+
+        // Update all
+        currentDate++;
+        while(events.peek() != null && events.peek().getDate() <= currentDate) {
+            Event current = events.poll();
+            assert current != null;
+            current.execute();
+        }
+
+        currentDate++;
     }
 
     public boolean isFinished() {
