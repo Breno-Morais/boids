@@ -77,6 +77,28 @@ public class Cells implements Simulable {
         eventManager.addEvent(new BufferSwapEvent(1, this));
     }
 
+    public void addGlider(int xMeio, int yMeio) {
+        grid[xMeio][yMeio] = 0;
+        grid[xMeio][yMeio + 1] = 0;
+        grid[xMeio - 1][yMeio + 1] = 0;
+        grid[xMeio - 1][yMeio - 1] = 0;
+        grid[xMeio - 1][yMeio] = 1;
+        grid[xMeio][yMeio + 1] = 1;
+        grid[xMeio + 1][yMeio - 1] = 1;
+        grid[xMeio + 1][yMeio + 1] = 1;
+        grid[xMeio + 1][yMeio] = 1;
+
+        bufferGrid[xMeio][yMeio] = 0;
+        bufferGrid[xMeio][yMeio + 1] = 0;
+        bufferGrid[xMeio - 1][yMeio + 1] = 0;
+        bufferGrid[xMeio - 1][yMeio - 1] = 0;
+        bufferGrid[xMeio - 1][yMeio] = 1;
+        bufferGrid[xMeio][yMeio + 1] = 1;
+        bufferGrid[xMeio + 1][yMeio - 1] = 1;
+        bufferGrid[xMeio + 1][yMeio + 1] = 1;
+        bufferGrid[xMeio + 1][yMeio] = 1;
+    }
+
     /* Get a random value for the grid */
     protected int gridValue() {
         return (Math.random() < 0.2) ? 1 : 0;
@@ -132,8 +154,8 @@ public class Cells implements Simulable {
     protected Color getColorForState(int state) {
         return switch (state) {
             case 0 -> Color.WHITE;
-            case 1 -> Color.BLUE;
-            default -> Color.BLACK;
+            case 1 -> Color.BLACK;
+            default -> Color.GRAY;
         };
     }
 
