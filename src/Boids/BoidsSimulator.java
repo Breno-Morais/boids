@@ -9,15 +9,17 @@ import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
+/* Simulator of any type of boids */
 public class BoidsSimulator implements Simulable {
+    /* Event manager responsible for the creation of other events and their execution */
     public GUISimulator gui;
 
-    // World setting
+// World setting
     protected final int neighborDistance = 25;
     public int width;
     public int height;
 
-    // Uniform grid for force detection
+// Uniform grid for force detection
     public int nGrid;
     public int mGrid;
     public LinkedList<Boid>[][] grid;
@@ -51,6 +53,7 @@ public class BoidsSimulator implements Simulable {
         listBoids.add(boids);
     }
 
+    /* Add the events of calculating the force and moving the boid */
     public void activateBoid(Boid boid, Boids boids) {
         eventManager.addEvent(new BoidForceEvent(eventManager.getCurrent(), boid, boids, eventManager));
         eventManager.addEvent(new BoidMoveEvent(eventManager.getCurrent()+1, boid, boids, eventManager));

@@ -6,14 +6,17 @@ import gui.GUISimulator;
 
 import java.awt.Color;
 
-
+/* Simulator of the game of immigration, derivative of the game of life */
 public class JeuImmigration extends Cells {
+    /* Total number of possible states */
     public static final int NUM_STATES = 4;
 
+    /* Base Constructor */
     public JeuImmigration(int rows, int cols, GUISimulator guiSim) {
         super(rows, cols, guiSim);
     }
 
+    /* Base Constructor */
     public JeuImmigration(int width, int height, int cellSize, GUISimulator guiSim) {
         super(width, height, cellSize, guiSim);
     }

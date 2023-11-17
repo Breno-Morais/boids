@@ -4,12 +4,17 @@ import Boids.*;
 
 import java.util.List;
 
+/* Group of preys, subtype of boids */
 public class PreyBoids extends Boids {
+    /* Constant of repulsion of predators */
     protected final double fear = 10;
+
+// Separation force settings
     protected final double smoothingRatePredator = -0.1;
     protected final double smoothingAmplitudePredator = 30;
     protected final double predatorDistance = neighborDistance * 2;
 
+    /* Base Constructor */
     public PreyBoids(BoidsSimulator boidsSimulator) {
         super(boidsSimulator);
 
@@ -38,7 +43,10 @@ public class PreyBoids extends Boids {
         double inverseOfNbNeighbors = 1.0/numberOfNeighbors;
 
         for(Boid neighbor : neighbors) {
-            if(neighbor.type == Boid.BoidType.PREY) {
+            if(neighbor.type == Boid.BoidType.PREDATOR) {
+                // Fear
+                force.add(fearForce(boid.pos, neighbor.pos));
+            } else {
                 // Separation
                 force.add(separationForce(boid, neighbor));
 
@@ -47,13 +55,11 @@ public class PreyBoids extends Boids {
 
                 // Medium point for cohesion
                 mediumPoint.add(neighbor.pos.getMultiplied(inverseOfNbNeighbors));
-            } else if(neighbor.type == Boid.BoidType.PREDATOR) {
-                // Fear
-                force.add(fearForce(boid.pos, neighbor.pos));
             }
         }
         // Cohesion
-        force.add(cohesionForce(boid, mediumPoint));
+        if(mediumPoint.x != 0 && mediumPoint.y != 0)
+            force.add(cohesionForce(boid, mediumPoint));
         
         boid.force = force;
     }

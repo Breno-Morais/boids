@@ -21,29 +21,43 @@ public class TestBoidsSimulator {
         for(int i = 0; i < 10; i++) {
             double posX = Math.random() * width;
             double posY = Math.random() * height;
-            double dirX = Math.random() - 0.5;
-            double dirY = Math.random() - 0.5;
+
+            double r = Math.sqrt(Math.random());
+            double theta = Math.random() * 2 * Math.PI;
+    
+            double dirX = r * Math.cos(theta);
+            double dirY = r * Math.sin(theta);
 
             predatorBoids.addBoid(posX, posY, dirX, dirY);
         }
 
-        for(int i = 0; i < 990; i++) {
+        for(int i = 0; i < 500; i++) {
             double posX = Math.random() * width;
             double posY = Math.random() * height;
-            double dirX = Math.random() - 0.5;
-            double dirY = Math.random() - 0.5;
+
+            double r = Math.sqrt(Math.random());
+            double theta = Math.random() * 2 * Math.PI;
+    
+            double dirX = r * Math.cos(theta);
+            double dirY = r * Math.sin(theta);
+
 
             preyBoids.addBoid(posX, posY, dirX, dirY);
         }
 
-        // for(int i = 0; i < 1000; i++) {
-        //     double posX = Math.random() * width;
-        //     double posY = Math.random() * height;
-        //     double dirX = Math.random() - 0.5;
-        //     double dirY = Math.random() - 0.5;
+        for(int i = 0; i < 490; i++) {
+            double posX = Math.random() * width;
+            double posY = Math.random() * height;
 
-        //     normalBoids.addBoid(posX, posY, dirX, dirY);
-        // }
+            double r = Math.sqrt(Math.random());
+            double theta = Math.random() * 2 * Math.PI;
+    
+            double dirX = r * Math.cos(theta);
+            double dirY = r * Math.sin(theta);
+
+
+            normalBoids.addBoid(posX, posY, dirX, dirY);
+        }
 
         gui.setSimulable(boidsSimulator);
     }

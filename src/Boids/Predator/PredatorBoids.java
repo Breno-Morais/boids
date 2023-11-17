@@ -6,17 +6,30 @@ import EventManager.EventManager;
 
 import java.util.List;
 
+/* Group of predators, subtype of boids */
 public class PredatorBoids extends Boids {
-    // Predator settings
+// Predator settings
+    /* Prey being hunted */
     protected Boid locked;
+
+    /* Multiplier of speed based on time since eating a prey */
     protected double hunger = 10;
+
+    /* Radius of contact to eat a prey */
     protected final double eatingRadius = 7.5;
+    
+    /* Time since eaten a prey */
     protected int lastEaten;
     protected double hungerSpeedFactor = 0.001;
 
+// World variables
+    /* Event manager responsible for the creation of other events and their execution */
     protected EventManager eventManager;
+
+    /* Collection of all groups of boids */
     protected List<Boids> listBoids;
 
+    /* Base Constructor */
     public PredatorBoids(BoidsSimulator boidsSimulator) {
         super(boidsSimulator);
         this.eventManager = boidsSimulator.eventManager;

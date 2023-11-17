@@ -8,18 +8,27 @@ import JueVie.Cells;
 import gui.GUISimulator;
 import java.awt.Color;
 
+/* Simulator of the model of schelling, using the grid system of the game of life */
 public class SchellingModels extends Cells {
+    /* List of all the empty homes */
     private LinkedList<Point> vacantHomes;
-    private final int k = 3; // limit of neighbors of different colors
-    private final int nbColors = 4; // 10 colors implemented
 
+    /* Limit of neighbors of different colors */
+    private final int k = 3;
+
+    /* Number Colors of the simulation, in the moment 10 colors are implemented */
+    private final int nbColors = 4;
+
+    /* Chance for a home to be empty */
     private final double chanceForZero = 0.06;
 
+    /* Base Constructor */
     public SchellingModels(int rows, int cols, GUISimulator guiSim){
         super(rows,cols,guiSim);
         initializeVacantHomes();
     }
 
+    /* Base Constructor */
     public SchellingModels(int width, int heigth, int cellSize, GUISimulator guiSim) {
         super(width, heigth, cellSize, guiSim);
         initializeVacantHomes();
@@ -41,6 +50,7 @@ public class SchellingModels extends Cells {
         return (Math.random() < chanceForZero) ? 0 : (int) (Math.random() * (nbColors)) + 1;
     }
 
+    /* If a family at i,j has k neighbors of diferent colors, they move to another house that is empty */
     @Override
     public void evolve(int i, int j) {
         if(shouldMove(i,j, grid[i][j])) {
@@ -48,6 +58,7 @@ public class SchellingModels extends Cells {
         }
     }
 
+    /* Move a family to another random home that is empty */
     private void moveToVacantHome(int i, int j) {
         if(vacantHomes.isEmpty())
             return;
@@ -60,27 +71,14 @@ public class SchellingModels extends Cells {
         grid[i][j] = 0;
 
         vacantHomes.addLast(new Point(i,j));
-        // Point emptyHouse = null;
-        // for(Point vacantHome : vacantHomes) {
-        //     if(!shouldMove(vacantHome.x, vacantHome.y, grid[i][j])) {
-        //         emptyHouse = vacantHome;
-        //         break;
-        //     }
-        // }
-
-        // if(emptyHouse != null){ 
-        //     grid[emptyHouse.x][emptyHouse.y] = grid[i][j];
-        //     grid[i][j] = 0;
-
-        //     vacantHomes.remove(emptyHouse);
-        //     vacantHomes.addLast(new Point(i,j));
-        // }
     }
 
+    /* If a family has more neighbors of diffent colors that they can tolerate */
     private boolean shouldMove(int i, int j, int v) {
         return (countNeighborsDifColor(i,j, v) > k);
     }
 
+    /* Count the number of neighbors of different colors */
     private int countNeighborsDifColor(int x, int y, int color) {
         int count = 0;
         for (int i = -1; i <= 1; i++) {
@@ -95,8 +93,7 @@ public class SchellingModels extends Cells {
 
                 boolean notTheSame = !(i == 0 && j == 0);
                 boolean isDifferent = grid[neighborX][neighborY] != color;
-                boolean isNotEmpty = true; //grid[neighborX][neighborY] != 0;
-                //System.out.println("X: " + x + " Y: " + y + " neig: " + neighborX + ", " + neighborY + " values XY: " + color + " NEIG: " + grid[neighborX][neighborY]);
+                boolean isNotEmpty = grid[neighborX][neighborY] != 0;
                 if (notTheSame && isDifferent && isNotEmpty){
                     count++;
                 }
@@ -106,6 +103,7 @@ public class SchellingModels extends Cells {
         return count;
     }
 
+    /* Add all the empty houses to the linked list of vacant homes */
     private void initializeVacantHomes() {
         vacantHomes = new LinkedList<>(); // on stocke les places vacantes dans une liste
         for (int i = 0; i < rows; i++) {
@@ -117,6 +115,7 @@ public class SchellingModels extends Cells {
         Collections.shuffle(vacantHomes);// permet de melanger les places vacantes de facon aleatoire et est une propriete particuliere des collections
     }
 
+    @Override
     protected Color getColorForState(int state) {
         return switch (state) {
             case 10 -> Color.LIGHT_GRAY; // Color 10

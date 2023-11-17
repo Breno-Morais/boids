@@ -6,17 +6,36 @@ import gui.Rectangle;
 import gui.Simulable;
 import java.awt.Color;
 
+/* Basic simulator for the game of life */
 public class Cells implements Simulable {
+    /* number of rows of the grid */
     protected int rows;
+
+    /* number of columns of the grid */
     protected int cols;
+
+    /* Graphical interface */
     protected GUISimulator guiSim;
+
+    /* Grid of the current sworld tate */
     protected int[][] grid;
+
+    /* Grid of the next world state */
     protected int[][] bufferGrid;
+
+    /* Event manager responsible for the creation of other events and their execution */
     protected EventManager eventManager;
+
+    /* Size of each cell, only the graphical representation */
     protected int cellSize;
+
+    /* Width of the world */
     protected int width;
+
+    /* Height of the world */
     protected int height;
 
+    /* Base Constructor */
     public Cells(int rows, int cols, GUISimulator guiSim) {
         this.rows = rows;
         this.cols = cols;
@@ -29,6 +48,7 @@ public class Cells implements Simulable {
         draw();
     }
 
+    /* Base Constructor */
     public Cells(int width, int height, int cellSize, GUISimulator guiSim) {
         this.height = height;
         this.width = width;
@@ -43,6 +63,8 @@ public class Cells implements Simulable {
         draw();
     }
 
+    /* Initialize the grid with random number, add an event of update for each cell
+     and an event for the update of the world state */
     public void initializeGrid() {
         for (int i = 0; i < rows; i++) {
             for (int j = 0; j < cols; j++) {
@@ -55,10 +77,12 @@ public class Cells implements Simulable {
         eventManager.addEvent(new BufferSwapEvent(1, this));
     }
 
+    /* Get a random value for the grid */
     protected int gridValue() {
         return (Math.random() < 0.2) ? 1 : 0;
     }
 
+    /* Store in the buffer grid the next state based on the rules of the game of life */
     public void evolve(int i, int j) {
         int state = 1;
         int neighbors = countAliveNeighbors(i, j,state);
@@ -69,6 +93,7 @@ public class Cells implements Simulable {
         }
     }
 
+    /* Count the number of cell in the vicinity that have the value of the variable state */
     public int countAliveNeighbors(int x, int y,int state) {
         int count = 0;
         for (int i = -1; i <= 1; i++) {
@@ -90,6 +115,7 @@ public class Cells implements Simulable {
         draw();
     }
 
+    /* Copy all the buffer grid to the grid, effectively taking the next step */
     public void bufferSwap() {
         for (int i = 0; i < rows; i++) {
             grid[i] = bufferGrid[i].clone();
@@ -101,6 +127,8 @@ public class Cells implements Simulable {
         initializeGrid();
         draw();
     }
+
+    /* Get color based on the state */
     protected Color getColorForState(int state) {
         return switch (state) {
             case 0 -> Color.WHITE;
@@ -108,6 +136,8 @@ public class Cells implements Simulable {
             default -> Color.BLACK;
         };
     }
+
+    /* Draw each cell */
     protected void draw() {
         guiSim.reset();    // clear the window
 
